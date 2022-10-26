@@ -66,6 +66,7 @@ public class BaseDao<T> {
     // 查找所有
     public List<T> getAll() {
         EntityManager manager = JPAUtil.getEntityManager();
+        // 编写HQL语言
         String hql = "select p from "+clz.getName()+" as p";
         Query query = manager.createQuery(hql);
         return query.getResultList();
