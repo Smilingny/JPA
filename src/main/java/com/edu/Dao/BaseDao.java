@@ -3,9 +3,11 @@ package com.edu.Dao;
 import com.edu.Util.JPAUtil;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class BaseDao<T> {
     //提供基础类，简化Dao层操作的重复性
@@ -42,12 +44,29 @@ public class BaseDao<T> {
     }
 
     // 删除数据
-    public void delete(Serializable i) {
+    public void delete(Serializable serializable) {
         EntityManager manager = JPAUtil.getEntityManager();
         manager.getTransaction().begin();
-        T entity = manager.find(clz, i);
+        // 查找实体
+        T entity = manager.find(clz, serializable);
+        // 进行删除操作
         manager.remove(entity);
         manager.getTransaction().commit();
         manager.close();
+    }
+
+    // 查找数据
+    public T getOne(Serializable serializable) {
+        EntityManager manager = JPAUtil.getEntityManager();
+        T student = manager.find(clz, serializable);
+        manager.close();
+        return student;
+    }
+
+    public List<T> getAll() {
+        EntityManager manager = JPAUtil.getEntityManager();
+        String hql = "select p from "+clz.getName()+" as p";
+        Query query = manager.createQuery(hql);
+        return query.getResultList();
     }
 }
