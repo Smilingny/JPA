@@ -63,6 +63,7 @@ public class BaseDao<T> {
         return student;
     }
 
+    // 查找所有
     public List<T> getAll() {
         EntityManager manager = JPAUtil.getEntityManager();
         String hql = "select p from "+clz.getName()+" as p";
